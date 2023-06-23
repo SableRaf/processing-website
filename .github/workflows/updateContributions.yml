@@ -43,6 +43,7 @@ jobs:
           git checkout -b contributions-update-branch
           git add .
           git diff --quiet && git diff --staged --quiet || git commit -m "Update contributions (automated via Action)"
+          git remote set-url origin https://SableRaf:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/SableRaf/processing-website.git
           git push origin contributions-update-branch || true
 
       - name: Create Pull Request
