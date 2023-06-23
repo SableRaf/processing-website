@@ -1,0 +1,54 @@
+name: Update Contributions
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # Run every Sunday at midnight UTC
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  update-contributions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout processing-website Repository
+        uses: actions/checkout@v2
+        with:
+          repository: SableRaf/processing-website
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Clone processing-contributions repository
+        run: |
+          git config --global credential.helper store
+          git clone https://SableRaf:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/processing/processing-contributions.git ../processing-contributions
+
+      - name: Run build_contribs.py from processing-contributions repository
+        run: |
+          cd ../processing-contributions/scripts
+          python3 build_contribs.py
+
+      - name: Run updateContributions.js in processing-website repository
+        run: |
+          cd ../processing-website/scripts
+          node updateContributions.js
+
+      - name: Configure Git, Commit changes and Create a new branch
+        run: |
+          git config user.name "SableRaf"
+          git config user.email "SableRaf@users.noreply.github.com"
+          git checkout -b contributions-update-branch
+          git add .
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update contributions (automated via Action)"
+          git push origin contributions-update-branch || true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          title: "Update Contributions (automated via Action)"
+          branch: "contributions-update-branch"
+          base: "main"
