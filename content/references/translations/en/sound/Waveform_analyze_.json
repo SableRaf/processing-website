@@ -3,11 +3,11 @@
   "related": [],
   "name": "analyze()",
   "description": "Gets the content of the current audiobuffer from the input source.",
-  "syntax": [".analyze()", ".analyze(value)"],
+  "syntax": ["waveform.analyze()", "waveform.analyze(value)"],
   "returns": "float[]",
   "type": "method",
-  "category": "waveform",
-  "subcategory": "",
+  "category": "Analysis",
+  "subcategory": "Waveform",
   "classanchor": "Waveform",
   "parameters": [
     {

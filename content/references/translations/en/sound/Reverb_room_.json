@@ -3,11 +3,11 @@
   "related": [],
   "name": "room()",
   "description": "Change the room size of the reverb effect.",
-  "syntax": [".room(room)"],
+  "syntax": ["reverb.room(room)"],
   "returns": "void",
   "type": "method",
-  "category": "reverb",
-  "subcategory": "",
+  "category": "Effects",
+  "subcategory": "Reverb",
   "classanchor": "Reverb",
   "parameters": [
     {

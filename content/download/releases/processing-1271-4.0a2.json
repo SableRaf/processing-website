@@ -1,7 +1,8 @@
 {
   "name": "Processing 4.0 alpha 2",
   "tagName": "processing-1271-4.0a2",
-  "publishedAt": "2020-09-16T01:22:27Z",
+  "isPrerelease": false,
+  "publishedAt": "2024-08-19T06:43:17Z",
   "releaseAssets": {
     "edges": [
       {

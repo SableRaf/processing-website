@@ -3,11 +3,11 @@
   "related": [],
   "name": "wet()",
   "description": "Change the wet/dry ratio of the reverb.",
-  "syntax": [".wet(wet)"],
+  "syntax": ["reverb.wet(wet)"],
   "returns": "void",
   "type": "method",
-  "category": "reverb",
-  "subcategory": "",
+  "category": "Effects",
+  "subcategory": "Reverb",
   "classanchor": "Reverb",
   "parameters": [
     {

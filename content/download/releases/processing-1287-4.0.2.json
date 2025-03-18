@@ -1,7 +1,8 @@
 {
   "name": "Processing 4.0.2",
   "tagName": "processing-1287-4.0.2",
-  "publishedAt": "2022-11-25T01:50:13Z",
+  "isPrerelease": false,
+  "publishedAt": "2024-08-19T06:44:37Z",
   "releaseAssets": {
     "edges": [
       {

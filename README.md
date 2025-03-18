@@ -1,16 +1,54 @@
 # Processing Website
 
-This repo holds the code for the [processing.org](https://processing.org) website. The website is built with [Gatsby](https://www.gatsbyjs.com/).
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e1d72dc4-ad96-4b12-bc25-4ec2aa532ad7/deploy-status)](https://app.netlify.com/sites/java-processing-faf822/deploys)
 
-## Running the site locally
+This repo holds the code for the [processing.org](https://processing.org) website. The website is built with [Gatsby](https://www.gatsbyjs.com/) and hosted on [Netlify](https://www.netlify.com/).
 
-To run the site locally, make sure that you have Node.js installed (`v12` minimum).
+We welcome contributions from the community to help improve the site!
 
-1. Clone down this repo and `cd` into the folder via the command-line
-2. Run `npm install` to install the dependencies
-3. Run `npm run dev` to run the development server
+## How To Contribute
 
-Now open [localhost:8000](http://localhost:8000) in your browser of choice.
+By contributing to this repository you agree to follow our community guidelines. Before getting started, please read our [Code of Conduct](https://github.com/processing/processing-website/blob/main/CODE-OF-CONDUCT.md). 
+
+If this is your first time contributing on GitHub, check out this [guide for first contributions](https://github.com/firstcontributions/first-contributions).
+
+To contribute to the Processing website, you'll need to identify an issue, fork this repo, set up the project on your local machine, make and test your changes, and then submit a pull request. 
+
+If you're already familiar with the steps above, you can skip to [Editing content](#editing-content). Otherwise, keep reading.
+
+### Step 1. Pick an Issue (or create one)
+
+Look at the [issues page](https://github.com/processing/processing-website/issues) for existing issues you can help with. Issues [labelled Good First Issue or Help Wanted](https://github.com/processing/processing-website/issues?q=is%3Aissue+is%3Aopen+label%3A%22Help+Wanted%22%2C%22Good+First+Issue%22+) are a good place to start. If you noticed an issue with the processing.org website and it hasn't been reported yet, please [open a new issue](https://github.com/processing/processing-website/issues/new/choose).
+
+### Step 2. Fork the Repository
+
+1. Click the "Fork" button in the top-right corner and follow the instructions to create a copy of this repository in your GitHub account.
+2. Clone the forked repository to your local machine.
+3. Navigate to the project folder using the command line, or open the project in your editor of choice and open the built-in terminal.
+
+### Step 3. Set up Your Local Environment
+
+Make sure to [install Node.js](https://nodejs.org/en/download/package-manager) (`v12` or higher) if it is not already installed.
+
+1. Run `npm install` to install the necessary dependencies.
+2. Run `npm run dev` to start the development server.
+3. Once the build process is complete, open [localhost:8000](http://localhost:8000) in your browser to view the site.
+4. Make your changes to the code.
+5. Saving your files will automatically trigger a rebuild and update the local site.
+
+### Step 4. Test Your Changes Locally
+
+1. Make sure your changes are working locally and that they fixed the issue.
+2. Make sure you only made the changes necessary to solve the issue. This will improve your chances of your PR getting merged.
+
+### Step 5. Submit Your Changes
+
+1. Commit your changes with a descriptive message.
+2. Push the changes to your forked repository on GitHub.
+3. Go to the original [Processing website repository](https://github.com/processing/processing-website) on GitHub and click the "Compare & pull request" button.
+4. Give your Pull Request a descriptive title.
+5. Write a clear description of the changes you made and why they should be merged. Link to the issue you are solving.
+6. Submit the pull request for review.
 
 ## Editing content
 
@@ -42,31 +80,52 @@ When translating the content to a new language you need to edit the [`i18n/confi
 
 ## Writing code
 
-- [Writing CSS](/docs/css.md)
+- **CSS:** [read about our stylesheets](/docs/css.md)
 
 ## Deploying the site
 
-The website is set up to deploy itself whenever the "Deploy Website" GitHub action is run. This triggers a new deploy from the `main` branch where the website is built, uploaded, and a new GitHub Release is created with a `reference.zip` file containing the contents of the website for loading in the IDE.
+Since 2024, this repository is deployed and built automatically on Netlify. Merged Pull Requests to main will trigger a deployment. No further action is necessary.
 
-1. Go to [Actions](https://github.com/processing/processing-website/actions)
-2. Click "Deploy Website" in the left sidebar
-3. Click "Run workflow" on the right
-4. Fill in the details and click the green "Run workflow" button.
+## Join the Processing community
+We proudly host an active and vibrant community on our [Processing Discourse Forum](https://discourse.processing.org/). Here you can find engaging discussions, ask questions, share your projects, and interact with like-minded Processing enthusiasts of all experience levels.
 
-Note that it's possible to deploy the website with or without making a GitHub release. For this, toggle the checkbox under "Run workflow".
+[![Discourse Users](https://img.shields.io/discourse/users?server=https%3A%2F%2Fdiscourse.processing.org)](https://discourse.processing.org/)
+
+## Licenses
+
+The content and the code of the Processing website are separately licensed.
+
+- The **content**, including the reference, is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License ([CC-BY-NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
+- The **code** that structures the website is licensed under the GNU General Public License version 2 ([GPL-2.0](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)). This applies to the website code written by our team and contributors from the Processing community.
+- The **examples** without a credit line or credited to Daniel Shiffman are in the public domain. Copyright for other credited examples remain with the original authors. See the [processing-examples](https://github.com/processing/processing-examples/) repo for details.
+- **Gatsby**, the framework used for this website, is licensed under the Zero-Clause BSD License ([0BSD](https://opensource.org/license/0BSD)).
+
+For licensing information about the Processing core library and software, see https://github.com/processing/processing4/blob/main/LICENSE.md
+
+## Thanks!
+
+<img width="200" alt="image" src="https://github.com/user-attachments/assets/4f4d55f1-6bb1-4657-a448-bac125e50a79">
+
+[Design Systems International](https://designsystems.international/) designed and built the current website and the new Processing family of logos through a year of dedicated volunteer work. 
+
+A remarkable group of volunteers converted all of the content from the prior Processing website to the new formats. A hearty round of applause for: Tetsu Kondo, Mark Webster, Lionel Radisson, Chris Coleman, Justin Gitlin, Seenahm Suriyasat, Shobhit Sharma, Karan Dudeja, Mark Hancock, Peter Jacobson, Oğuzhan Göregen, Bryan Ma, Ashley James Brown 💙
+
+![image](https://github.com/user-attachments/assets/da687f3b-f839-4036-8d14-453b354ca40c)
+
+Thanks to [Netlify](https://www.netlify.com/) for providing hosting, automation, and deploy previews!
+
+---
+> [!NOTE]
+> The following is included in the processing-website repository for historical reasons but it is not related to the functioning of the Processing website itself. It should eventually be moved to a more suitable location.
 
 ## `keywords.txt`
 
-The website repo has a script that generates the `keywords.txt` file into the `processing4` repo to use for syntax highlighting the PDE. Follow these steps in order to generate that file:
+This repo contains a script [`updateKeywords.js`](https://github.com/processing/processing-website/blob/main/scripts/updateKeywords.js) that generates the [`keywords.txt`](https://github.com/processing/processing4/blob/6a2cf8cda35552c62a1a794bb1e20f43fe8ffcda/java/keywords.txt) file used for syntax highlighting in the Processing IDE. 
+
+Follow these steps in order to generate the `keywords.txt` file:
 
 1. Make sure you have this `processing-website` repo and the `processing4` repo next to each other on your computer
 2. Make sure the [JavaDoc and reference](https://github.com/processing/processing-website/blob/main/docs/reference.md) are up to date with the latest version of Processing. Otherwise make the necessary updates to the JavaDoc in the `processing4` repo then [run the Doclet script](https://github.com/processing/processing-doclet/blob/main/README.md). _(note: this step is only necessary if new keywords were added to the Processing API)_
 3. Run `npm run updateKeywords`
 
 The `processing4` repo now has an updated `java/keywords.txt` file.
-
-## Building the site
-
-If you need to manually build the site, you can do it by running `npm run build` from the project source. This command is that runs behind the scenes when deploying a release.
-
-It will build from the source and produce the static website in a folder `public`. Once built, the site can run in any static file server.

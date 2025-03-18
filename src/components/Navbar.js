@@ -42,14 +42,15 @@ export const items = [
     ]
   },
   {
-    name: 'teach',
-    href: 'https://processingfoundation.org/education'
+    name: 'forum',
+    href: 'https://discourse.processing.org'
   },
   {
     name: 'about',
     children: [
       { name: 'overview', href: '/overview' },
-      { name: 'people', href: '/people' }
+      { name: 'people', href: '/people' },
+      { name: 'privacy', href: '/privacy' }
     ]
   },
   {

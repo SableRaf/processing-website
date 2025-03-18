@@ -3,11 +3,11 @@
   "related": [],
   "name": "frames()",
   "description": "Returns the number of frames of this soundfile.",
-  "syntax": [".frames()"],
+  "syntax": ["soundfile.frames()"],
   "returns": "int",
   "type": "method",
-  "category": "soundfile",
-  "subcategory": "",
+  "category": "Sampling",
+  "subcategory": "SoundFile",
   "classanchor": "SoundFile",
   "parameters": []
 }

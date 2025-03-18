@@ -4,15 +4,15 @@
   "name": "start()",
   "description": "Start the input stream without routing it to the audio output. This is useful\n if you only want to perform audio analysis based on the microphone input.",
   "syntax": [
-    ".start()",
-    ".start(amp)",
-    ".start(amp, add)",
-    ".start(amp, add, pos)"
+    "audioin.start()",
+    "audioin.start(amp)",
+    "audioin.start(amp, add)",
+    "audioin.start(amp, add, pos)"
   ],
   "returns": "void",
   "type": "method",
-  "category": "audioin",
-  "subcategory": "",
+  "category": "I/O",
+  "subcategory": "AudioIn",
   "classanchor": "AudioIn",
   "parameters": [
     {

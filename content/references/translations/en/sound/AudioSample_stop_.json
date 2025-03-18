@@ -3,11 +3,11 @@
   "related": [],
   "name": "stop()",
   "description": "Stops the playback.",
-  "syntax": [".stop()"],
+  "syntax": ["audiosample.stop()"],
   "returns": "void",
   "type": "method",
-  "category": "audiosample",
-  "subcategory": "",
+  "category": "Sampling",
+  "subcategory": "AudioSample",
   "classanchor": "AudioSample",
   "parameters": []
 }

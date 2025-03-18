@@ -22,14 +22,14 @@ function runLiveSketch(s) {
 
   s.setup = () => {
     s.createCanvas(640, 360);
-    // Create the font
     s.textFont('Source Code Pro', 36);
+    s.textWrap(s.CHAR);  // Added text wrap modification
   };
 
   s.draw = () => {
     s.background(0); // Set background to black
 
-    // Draw the letter to the center of the screen
+    // Draw the letter and status text
     s.textSize(14);
     s.fill(255);
     s.noStroke();
@@ -42,11 +42,10 @@ function runLiveSketch(s) {
   };
 
   s.keyPressed = () => {
-    // The variable "key" always contains the value
-    // of the most recent key pressed.
     if ((s.key >= 'A' && s.key <= 'z') || s.key == ' ') {
       letter = s.key;
       words = words + s.key;
     }
   };
+ 
 }

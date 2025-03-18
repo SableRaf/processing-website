@@ -3,11 +3,11 @@
   "related": [],
   "name": "input()",
   "description": "Define the audio input for the analyzer.",
-  "syntax": [".input(input)"],
+  "syntax": ["amplitude.input(input)"],
   "returns": "void",
   "type": "method",
-  "category": "amplitude",
-  "subcategory": "",
+  "category": "Analysis",
+  "subcategory": "Amplitude",
   "classanchor": "Amplitude",
   "parameters": [
     {

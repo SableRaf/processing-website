@@ -1,19 +1,29 @@
 {
-  "brief": "Start the filter.",
+  "brief": "Start applying this bandpass filter to an input signal.",
   "related": [],
   "name": "process()",
-  "description": "Start the filter.",
-  "syntax": [".process(input)"],
+  "description": "Start applying this bandpass filter to an input signal.",
+  "syntax": ["bandpass.process(input, freq, bw)"],
   "returns": "void",
   "type": "method",
-  "category": "effects",
+  "category": "Effects",
   "subcategory": "BandPass",
   "classanchor": "BandPass",
   "parameters": [
     {
       "name": "input",
-      "description": "Input audio source",
+      "description": "the sound source to filter",
       "type": ["SoundObject"]
+    },
+    {
+      "name": "freq",
+      "description": "the center frequency in Hertz",
+      "type": ["float"]
+    },
+    {
+      "name": "bw",
+      "description": "the filter bandwidth in Hertz",
+      "type": ["float"]
     }
   ]
 }

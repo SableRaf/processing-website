@@ -1,7 +1,8 @@
 {
   "name": "Processing 4.0 beta 5",
   "tagName": "processing-1280-4.0b5",
-  "publishedAt": "2022-02-04T00:49:12Z",
+  "isPrerelease": false,
+  "publishedAt": "2024-08-19T06:44:02Z",
   "releaseAssets": {
     "edges": [
       {

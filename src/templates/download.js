@@ -28,9 +28,15 @@ import { useMachineOS, usePreparedReleases } from '../hooks/download';
 import * as css from '../styles/templates/download.module.css';
 import * as grid from '../styles/grid.module.css';
 
+// Set to false to hide the Donate character
+const showDonate = false;
+
 const Download = ({ data }) => {
   const intl = useIntl();
   const releases = usePreparedReleases(data.releases.nodes);
+  const prereleases = usePreparedReleases(data.prereleases.nodes);
+
+  const [selectedRelease, setSelectedRelease] = useState(releases[0]);
 
   // gatsby-plugin-fathom requires us to use hooks
   const trackWindows = useGoal('CIMDWXJV');
@@ -68,6 +74,7 @@ const Download = ({ data }) => {
     window.addEventListener('focus', goToDonate);
   };
 
+
   return (
     <Layout>
       <HeadMatter
@@ -77,19 +84,28 @@ const Download = ({ data }) => {
 
       <div className={classnames(grid.container, grid.grid)}>
         <div className={classnames(grid.col, css.headerContent)}>
-          <Donate />
+          {showDonate && <Donate />}
           <h1>{intl.formatMessage({ id: 'downloadTitle' })}</h1>
           <p>{intl.formatMessage({ id: 'downloadIntro' })}</p>
         </div>
       </div>
 
+      <PreReleaseSwitch
+        releases={releases}
+        prereleases={prereleases}
+        selectedRelease={selectedRelease}
+        setSelectedRelease={setSelectedRelease}
+      />
+
+      {selectedRelease.version === "4.3.1" && <a href='https://github.com/processing/processing4-carbon-aug-19/wiki/Announcing-Processing-4.3.1-(release-candidate)' style={{ textAlign: "center", display: "block", paddingTop: "var(--gutter)", textDecoration: "underline" }}> Read the announcement</a>}
+
       <MainDownloadSection
-        release={releases[0]}
+        release={selectedRelease}
         onAfterDownload={onAfterDownload}
       />
 
       <OSSectionContainer
-        release={releases[0]}
+        release={selectedRelease}
         onAfterDownload={onAfterDownload}
       />
 
@@ -152,16 +168,34 @@ const Download = ({ data }) => {
   );
 };
 
+const PreReleaseSwitch = memo(({ releases, prereleases, selectedRelease, setSelectedRelease }) => {
+  const intl = useIntl();
+
+  return (
+    <>
+      {
+        prereleases.length > 0 && (
+          <div className={classnames(grid.container, grid.grid, css.preReleaseSwitchContainer)}>
+            <div className={classnames(grid.col, css.preReleaseSwitch)}>
+              <button className={selectedRelease === releases[0] ? css.selected : ""} onClick={() => setSelectedRelease(releases[0])}>
+                {intl.formatMessage({ id: 'main' })} ({releases[0].version})
+              </button>
+              <button className={selectedRelease === prereleases[0] ? css.selected : ""} onClick={() => setSelectedRelease(prereleases[0])}>
+                {intl.formatMessage({ id: 'beta' })} ({prereleases[0].version})
+              </button>
+            </div>
+          </div>
+        )
+      }
+    </>
+  )
+});
+
 const MainDownloadSection = memo(({ release, onAfterDownload }) => {
   const intl = useIntl();
   const detectedAsset = useMachineOS(release.assetsByOs, release.publishedAt);
 
-  const appleSiliconAsset = useMemo(() => {
-    for (let asset of release.assets) {
-      if (asset.bit === 'Apple Silicon') return asset;
-    }
-    return null;
-  }, [release]);
+  const appleSiliconAsset = useMemo(() => release.assets.find(asset => detectedAsset.os === "macOS" && asset.os === "macOS" && asset.bit === "Intel"), [release, detectedAsset]);
 
   return (
     <div className={classnames(grid.container, grid.grid)}>
@@ -200,19 +234,18 @@ const MainDownloadSection = memo(({ release, onAfterDownload }) => {
             />
           </div>
         )}
-        {detectedAsset.asset &&
-          detectedAsset.asset.name.includes('macos-x64') &&
-          appleSiliconAsset && (
-            <div>
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: intl
-                    .formatMessage({ id: 'macOsIntelWarning' })
-                    .replace('{0}', appleSiliconAsset.url)
-                }}
-              />
-            </div>
-          )}
+        {appleSiliconAsset && (
+          <div>
+            <p
+              className={css.appleSiliconWarning}
+              dangerouslySetInnerHTML={{
+                __html: intl
+                  .formatMessage({ id: 'macOsIntelWarning' })
+                  .replace('{0}', appleSiliconAsset.url)
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -280,8 +313,9 @@ const InfoTooltip = ({ asset, date, className, zIndex, translateX }) => {
 const osAndComponents = [
   { osName: 'Windows', logoComponent: <LogoWindows /> },
   { osName: 'macOS', logoComponent: <LogoMac /> },
+  { osName: "Linux & Raspbery Pi", logoComponent: <div className='flex'><LogoLinux /><LogoRaspberry /> </div> },
   { osName: 'Linux', logoComponent: <LogoLinux /> },
-  { osName: 'Raspberry Pi', logoComponent: <LogoRaspberry /> }
+  { osName: 'Raspberry Pi', logoComponent: <LogoRaspberry /> },
 ];
 
 const OSSectionContainer = memo(({ release, onAfterDownload }) => {
@@ -321,6 +355,7 @@ const OSSection = memo(
     onSelect,
     onAfterDownload
   }) => {
+    if (assets === undefined || assets?.length === 0) return null;
     return (
       <div
         className={classnames(css.osSection, {
@@ -366,7 +401,7 @@ const Link = memo(({ href, icon, title, description }) => (
 ));
 
 export const query = graphql`
-  query($selectedReleases: [String!]!) {
+  query($selectedReleases: [String!]!, $selectedPreReleases: [String!]!) {
     releases: allFile(
       filter: {
         sourceInstanceName: { eq: "download" }
@@ -380,6 +415,33 @@ export const query = graphql`
           name
           tagName
           publishedAt
+          isPrerelease
+          releaseAssets {
+            edges {
+              node {
+                name
+                downloadUrl
+                size
+              }
+            }
+          }
+        }
+      }
+    }
+    prereleases: allFile(
+      filter: {
+        sourceInstanceName: { eq: "download" }
+        relativeDirectory: { eq: "releases" }
+        childJson: { tagName: { in: $selectedPreReleases } }
+      }
+      sort: { fields: childJson___name, order: DESC }
+    ) {
+      nodes {
+        childJson {
+          name
+          tagName
+          publishedAt
+          isPrerelease
           releaseAssets {
             edges {
               node {

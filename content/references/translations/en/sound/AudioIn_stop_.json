@@ -1,9 +1,9 @@
 {
-  "brief": "Stops the Input Stream.",
+  "brief": "Stop capturing sound from this audio input.",
   "related": [],
   "name": "stop()",
-  "description": "Stops the Input Stream.",
-  "syntax": [".stop()"],
+  "description": "Stop capturing sound from this audio input.",
+  "syntax": ["audioin.stop()"],
   "returns": "void",
   "type": "method",
   "category": "I/O",

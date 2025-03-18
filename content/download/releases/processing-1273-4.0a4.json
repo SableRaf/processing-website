@@ -1,14 +1,15 @@
 {
   "name": "Processing 4.0 alpha 4",
   "tagName": "processing-1273-4.0a4",
-  "publishedAt": "2021-06-15T22:40:02Z",
+  "isPrerelease": false,
+  "publishedAt": "2024-08-19T06:43:27Z",
   "releaseAssets": {
     "edges": [
       {
         "node": {
-          "name": "processing-4.0a4-windows64.zip",
-          "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1273-4.0a4/processing-4.0a4-windows64.zip",
-          "size": 255860310
+          "name": "processing-4.0a4-linux64.tgz",
+          "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1273-4.0a4/processing-4.0a4-linux64.tgz",
+          "size": 228628073
         }
       },
       {
@@ -20,9 +21,9 @@
       },
       {
         "node": {
-          "name": "processing-4.0a4-linux64.tgz",
-          "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1273-4.0a4/processing-4.0a4-linux64.tgz",
-          "size": 228628073
+          "name": "processing-4.0a4-windows64.zip",
+          "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1273-4.0a4/processing-4.0a4-windows64.zip",
+          "size": 255860310
         }
       }
     ]

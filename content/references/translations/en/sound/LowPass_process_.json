@@ -1,0 +1,29 @@
+{
+  "brief": "Starts applying this filter to an input signal.",
+  "related": [],
+  "name": "process()",
+  "description": "Starts applying this filter to an input signal.",
+  "syntax": ["filter.process(input, freq)", "filter.process(input, freq, q)"],
+  "returns": "void",
+  "type": "method",
+  "category": "Effects",
+  "subcategory": "LowPass",
+  "classanchor": "LowPass",
+  "parameters": [
+    {
+      "name": "input",
+      "description": "the sound source to filter",
+      "type": ["SoundObject"]
+    },
+    {
+      "name": "freq",
+      "description": "the cutoff frequency in Hertz",
+      "type": ["float"]
+    },
+    {
+      "name": "q",
+      "description": "the resonance (or 'Q factor'), a value between 0.1 and 10",
+      "type": ["float"]
+    }
+  ]
+}

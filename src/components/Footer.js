@@ -15,21 +15,27 @@ const Footer = ({ withSidebar }) => {
       <div className={classnames(grid.col, css.contactWrapper)}>
         <h3>{intl.formatMessage({ id: 'contactUs' })}</h3>
         <p>{intl.formatMessage({ id: 'contactUsDescription' })}</p>
-        <a href="mailto:foundation@processing.org">foundation@processing.org</a>
+        <a href="mailto:hello@processing.org">hello@processing.org</a>
       </div>
       <div className={classnames(grid.col, css.socialmediaWrapper)}>
         <ul>
           <li>
-            <a href={'https://twitter.com/ProcessingOrg'} target="_blank" rel="noreferrer">Twitter</a>
+            <a href={'http://github.com/processing/'} target="_blank" rel="noreferrer">GitHub</a>
+          </li>
+          <li>
+            <a href={'https://bsky.app/profile/processing.org'} target="_blank" rel="noreferrer">Bluesky</a>
+          </li>
+          <li>
+            <a href={'https://mastodon.social/@processing/'} target="_blank" rel="noreferrer">Mastodon</a>
+          </li>
+          <li>
+            <a href={'https://www.instagram.com/processing_core/'} target="_blank" rel="noreferrer">Instagram</a>
+          </li>
+          <li>
+            <a href={'https://www.facebook.com/people/Processing-Core/61567491443061/'} target="_blank" rel="noreferrer">Facebook</a>
           </li>
           <li>
             <a href={'https://medium.com/@ProcessingOrg'} target="_blank" rel="noreferrer">Medium</a>
-          </li>
-          <li>
-            <a href={'https://www.instagram.com/processingorg/'} target="_blank" rel="noreferrer">Instagram</a>
-          </li>
-          <li>
-            <a href={'http://github.com/processing/'} target="_blank" rel="noreferrer">GitHub</a>
           </li>
         </ul>
         <p

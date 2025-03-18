@@ -1,16 +1,10 @@
 {
   "name": "Processing 4.0 beta 8",
   "tagName": "processing-1283-4.0b8",
-  "publishedAt": "2022-04-23T19:46:06Z",
+  "isPrerelease": false,
+  "publishedAt": "2024-08-19T06:44:17Z",
   "releaseAssets": {
     "edges": [
-      {
-        "node": {
-          "name": "processing-4.0b8-macos-aarch64.zip",
-          "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1283-4.0b8/processing-4.0b8-macos-aarch64.zip",
-          "size": 220175412
-        }
-      },
       {
         "node": {
           "name": "processing-4.0b8-linux-arm32.tgz",
@@ -27,6 +21,20 @@
       },
       {
         "node": {
+          "name": "processing-4.0b8-linux-x64.tgz",
+          "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1283-4.0b8/processing-4.0b8-linux-x64.tgz",
+          "size": 234913427
+        }
+      },
+      {
+        "node": {
+          "name": "processing-4.0b8-macos-aarch64.zip",
+          "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1283-4.0b8/processing-4.0b8-macos-aarch64.zip",
+          "size": 220175412
+        }
+      },
+      {
+        "node": {
           "name": "processing-4.0b8-macos-x64.zip",
           "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1283-4.0b8/processing-4.0b8-macos-x64.zip",
           "size": 229994035
@@ -37,13 +45,6 @@
           "name": "processing-4.0b8-windows-x64.zip",
           "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1283-4.0b8/processing-4.0b8-windows-x64.zip",
           "size": 229027198
-        }
-      },
-      {
-        "node": {
-          "name": "processing-4.0b8-linux-x64.tgz",
-          "downloadUrl": "https://github.com/processing/processing4/releases/download/processing-1283-4.0b8/processing-4.0b8-linux-x64.tgz",
-          "size": 234913427
         }
       }
     ]

@@ -1,19 +1,29 @@
 {
-  "brief": "Start the filter.",
+  "brief": "Starts applying this filter to an input signal.",
   "related": [],
   "name": "process()",
-  "description": "Start the filter.",
-  "syntax": [".process(input)"],
+  "description": "Starts applying this filter to an input signal.",
+  "syntax": ["filter.process(input, freq)", "filter.process(input, freq, q)"],
   "returns": "void",
   "type": "method",
-  "category": "effects",
+  "category": "Effects",
   "subcategory": "HighPass",
   "classanchor": "HighPass",
   "parameters": [
     {
       "name": "input",
-      "description": "Input audio source",
+      "description": "the sound source to filter",
       "type": ["SoundObject"]
+    },
+    {
+      "name": "freq",
+      "description": "the cutoff frequency in Hertz",
+      "type": ["float"]
+    },
+    {
+      "name": "q",
+      "description": "the resonance (or 'Q factor'), a value between 0.1 and 10",
+      "type": ["float"]
     }
   ]
 }
