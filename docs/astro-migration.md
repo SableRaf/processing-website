@@ -1,6 +1,6 @@
 # Gatsby to Astro migration plan
 
-Plan prepared on 2026-10-29. This document proposes the migration; no application code or deployment has changed.
+Plan prepared on 2026-10-29 against `main` at PR #730.
 
 Use Astro to generate the existing site as static HTML, retain React for interactive features, and keep the current content folders and authoring scripts. Deliver the completed migration to Cloudflare after comparison with Gatsby and the live site.
 
@@ -22,7 +22,8 @@ The source inventory contains the following route families. These counts describ
 | Core library indexes | 8 distinct names | Preserve `/reference/libraries/{name}/index.html` links and library descriptions. |
 | File-based pages | 13 source pages | Include home, reference/examples indexes, environment, overview, people, privacy, donate, tutorials, books, 404, 429, and `/test`. Review existing utility routes before removing any. |
 | Other generated pages | Libraries, tools, download, releases | Preserve catalog ordering, selected releases, release assets, and platform controls. |
-| Non-page outputs | `/download/latest.txt`, `reference.zip` | Preserve observed contents and consumers, not just filenames. |
+| Platform download pages | 4 pages from `content/download/platforms/` | Preserve extensionless `/download/{platform}` paths, the homepage download CTA links to them, and the preselected OS passed to the download template. |
+| Non-page outputs | `/download/latest.txt`, `reference.zip` | Preserve observed contents and consumers, not just filenames. `latest.txt` must contain the highest build number in selected releases (live value: `1435`), because the Processing app's update check reads it ([#722](https://github.com/processing/processing-website/pull/722)). |
 
 The route spelling comes from [path helpers](../src/utils/paths.js) and `gatsby-node.js`. Tutorial slugs are not necessarily folder names. Source generation also visits some translated MDX files twice; generate one English route per identity rather than reproducing duplicate build calls.
 
@@ -32,7 +33,7 @@ The local `public/` and `.cache/` contain development artifacts, not a usable pr
 
 ## Target architecture
 
-Follow the supplied [Gatsby migration guide](https://docs.astro.build/en/guides/migrate-to-astro/from-gatsby/) for Astro page/layout conversion, React reuse, MDX integration, and removal of Gatsby GraphQL queries. Keep the application statically generated; Cloudflare continues to serve the resulting files.
+Follow Astro's [Gatsby migration guide](https://docs.astro.build/en/guides/migrate-to-astro/from-gatsby/) for Astro page/layout conversion, React reuse, MDX integration, and removal of Gatsby GraphQL queries. Keep the application statically generated; Cloudflare continues to serve the resulting files.
 
 ```mermaid
 flowchart LR
@@ -53,7 +54,8 @@ flowchart LR
 | `src/content/reference.ts` | Own reference identity, parent/category joins, sidebars, code/image pairs, and reverse featured-example links. |
 | `src/content/examples.ts` | Own example identity, PDE ordering, live source, data-file mapping, covers, and related cards. |
 | `src/content/editorial.ts` | Prepare MDX pages, tutorials, books, library descriptions, and catalog content. |
-| `src/content/downloads.ts` | Select local release records and preserve the `latest.txt` contract. |
+| `src/content/downloads.ts` | Select local release records, list platform pages, and preserve the `latest.txt` contract. |
+| `src/i18n.*` | Load English messages from `i18n/react-intl` for Astro templates and React islands. |
 | `src/utils/paths.*` | Keep one set of public path rules shared by generated routes and links. Migrate existing script callers together if its module format changes. |
 | `src/pages/`, `src/layouts/` | Generate routes, document metadata, and static page markup. |
 | `src/components/` | Provide MDX mappings, reusable presentation, and bounded React interactions. |
@@ -79,6 +81,10 @@ Validate input shapes and relationships at the content boundary, with errors nam
 
 Render document structure and content with Astro. Reuse stateful React features such as the homepage editor, filter lists, code controls, and release selectors. Rename retained JSX-bearing `.js` components to `.jsx`. Hydrate each feature deliberately; static React rendering alone does not enable event handlers. Keep context-dependent controls in one React subtree, and replace document-wide active-heading/header tracking with one document controller. Astro-rendered MDX is not a React-context descendant of a separate island. [Astro framework components](https://docs.astro.build/en/guides/framework-components/)
 
+All interface text currently goes through react-intl: 39 files under `src` use `useIntl`, `FormattedMessage`, or the localization hooks, with messages in `i18n/react-intl`. Astro templates read messages through a small lookup over the English message file. Each retained React island receives either its own `IntlProvider` or the resolved strings it needs as props; prefer props for islands that use only a few messages. Decide this in Phase 3, because it shapes every converted page shell. Keep message IDs unchanged so the retained Spanish files stay usable. About 15 English messages contain HTML markup. Pages render some of them as raw HTML (for example `donateIntro` on the donate page) and strip the tags for meta descriptions, so the lookup must support both uses.
+
+Replace the remaining Gatsby plugins explicitly: `gatsby-plugin-manifest` (web manifest and favicons), react-helmet (document metadata, moving to Astro layouts), `gatsby-plugin-fathom` (analytics script), and `gatsby-plugin-react-svg` (SVG components).
+
 Use ordinary document navigation initially. Verify back/forward behavior, anchors, focus, scroll, and saved state. Preserve p5 1.4.0 behavior during migration; make its loading, initialization, errors, timers, and teardown explicit. Treat a p5 upgrade as separate work.
 
 ## Implementation sequence
@@ -87,9 +93,9 @@ Each phase ends in evidence that the next phase can rely on. Develop in an isola
 
 | Phase | Work | Exit condition |
 | --- | --- | --- |
-| 1. Capture the baseline | Produce a clean Gatsby artifact from a recorded revision/runtime/lockfile. Capture the live Cloudflare route responses, screenshots, metadata, content, downloads, and interaction behavior. Record existing failures separately. | A reusable comparison manifest and representative browser fixtures exist. Build failures have a diagnosis; partial dev output is not substituted for a baseline. |
+| 1. Capture the baseline | Produce a clean Gatsby artifact from a recorded revision with the production runtime: Node 22 and `npm install`, as in `deploy.yml` (`.nvmrc` still says 16, and CI does not enforce the lockfile). Capture the live Cloudflare route responses, screenshots, metadata, content, downloads, and interaction behavior. Record existing failures separately. | A reusable comparison manifest and representative browser fixtures exist. Build failures have a diagnosis; partial dev output is not substituted for a baseline. |
 | 2. Establish Astro | Pin compatible Astro, React, MDX, and Node versions. Align `.nvmrc`, build CI, and maintenance CI where appropriate. Configure static output, assets, styles, and a minimal layout. | The minimal site builds reproducibly and serves through local Wrangler with root, directory, `.html`, missing-page, and static-file probes. |
-| 3. Prove the hard cases | Port a method reference with parent/in-use/code/image joins, a live example with multiple PDE/data files, and a rich MDX tutorial. Include library index and download artifact probes. | Data, rendering, browser behavior, and HTTP route comparisons pass. Resolve the architectural gaps before bulk conversion. |
+| 3. Prove the hard cases | Port a method reference with parent/in-use/code/image joins, a live example with multiple PDE/data files, and a rich MDX tutorial. Include library index and download artifact probes, and settle the react-intl approach. | Data, rendering, browser behavior, and HTTP route comparisons pass. Resolve the architectural gaps before bulk conversion. |
 | 4. Port all content families | Complete domain loaders and joins, then reference/library pages, examples, tutorials/editorial content, catalogs, downloads/releases, and remaining fixed pages. Convert the shared shell and browser features alongside their first consumers. | Every baseline route has matching intended content or an explicit reviewed difference; links and referenced assets resolve. Spanish content remains retained and unpublished. |
 | 5. Verify the complete artifact | Run the route/content comparison, targeted browser tests, responsive/accessibility checks, download checks, and archive checks. Compare build output and browser payloads with Gatsby on equivalent inputs. | No unexplained route, content, asset, or interaction regressions. Record measured results without promising a speedup in advance. |
 | 6. Switch and retire Gatsby | Update the production build/output consumers together, publish the verified artifact through the existing Cloudflare workflow, smoke-test production, then complete obsolete-code/documentation cleanup. | Production smoke checks pass, rollback is available, and Gatsby imports, plugins, configuration, and dependencies are removed from the final application. |
@@ -100,11 +106,11 @@ Keep the baseline Gatsby dependency tree separate from the Astro installation. D
 
 Port the PostCSS pipeline into explicit configuration, including custom media/properties from `variables.css`, nesting, normalization, and imports. Check CSS Module import semantics, font URLs, SVG component imports, and layout rules that currently target Gatsby wrapper IDs.
 
-Compile the full MDX corpus early enough to expose syntax/plugin incompatibilities. Supply the component map explicitly when rendering MDX. Preserve `FixedImage`, `Intro`, `HighlightBlock`, `Note`, code/entity rendering, heading IDs, tables of contents, relative images, and linked-file copies. Replace Gatsby image objects with Astro image handling or explicit asset metadata; compare dimensions, responsive output, and alt text. [Astro MDX integration](https://docs.astro.build/en/guides/integrations-guide/mdx/)
+The site uses MDX 1.6 (`@mdx-js/mdx` 1.6.22); `@astrojs/mdx` uses MDX 3. This version jump is the most likely source of compile failures: HTML comments, unescaped `{` and `<`, autolinks, and inline JSX parse differently. Compile the full MDX corpus in Phase 3, before bulk conversion, and choose the Phase 3 tutorial with these constructs in mind. Supply the component map explicitly when rendering MDX. Preserve `FixedImage`, `Intro`, `HighlightBlock`, `Note`, code/entity rendering, heading IDs, tables of contents, relative images, and linked-file copies. Replace Gatsby image objects with Astro image handling or explicit asset metadata; compare dimensions, responsive output, and alt text. [Astro MDX integration](https://docs.astro.build/en/guides/integrations-guide/mdx/)
 
 ## Cloudflare delivery and rollback
 
-Distinguish source links, output filenames, and HTTP behavior. Record status, redirect `Location`, final URL, and declared metadata for `.html` references/examples, library `index.html`, root, directory, slashless, query-string, and unknown routes. Preserve existing working entry links and current canonical behavior unless a change is explicitly accepted.
+Distinguish source links, output filenames, and HTTP behavior. Production currently uses Cloudflare's default HTML handling: `/reference/setup_.html` returns a 307 redirect to `/reference/setup_`. Record status, redirect `Location`, final URL, and declared metadata for `.html` references/examples, library `index.html`, root, directory, slashless, query-string, and unknown routes. Preserve existing working entry links and current canonical behavior unless a change is explicitly accepted.
 
 Cloudflare's default HTML handling can redirect `.html` files to extensionless paths. Setting `html_handling: 'none'` also disables implicit directory indexes. Do not select either mode solely from the source route names. Prove the Astro output layout and Cloudflare configuration together against the baseline matrix; use explicit aliases or narrowly scoped routing only where the matrix requires them. [Cloudflare HTML handling](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/)
 
@@ -121,7 +127,7 @@ Update [README](../README.md), [publishing instructions](publish.md), content do
 | Area | Required evidence |
 | --- | --- |
 | Routes and content | Compare the complete baseline inventory; preserve reference signatures/descriptions/examples, tutorial anchors, catalog membership/order, metadata, and error statuses. Crawl internal links and local assets. Deduplicate generation without dropping pages. |
-| Browser features | Check mobile navigation, sidebar state, heading tracking, local OR-term filters, external Google site search, keyboard/focus behavior, tabs/copy, saved homepage editor state, and donation interactions. |
+| Browser features | Check mobile navigation, sidebar state, heading tracking, local OR-term filters, external Google site search, keyboard/focus behavior including the skip link to `#main-content`, tabs/copy, saved homepage editor state, client-side random homepage examples, and donation interactions. |
 | Examples and desktop integration | Exercise static covers and live canvases, data-heavy and multi-file examples, page reload/back navigation, p5 errors/cleanup, and the `pde://` payload including absolute data URLs. Verify bytes and filenames, not merely successful clicks. |
 | Downloads and analytics | Check selected release/platform links, Fathom pageviews and existing platform goal IDs, post-download donation navigation, and the external banner. Use intercepted requests during automated tests to avoid polluting analytics. |
 | Assets and archive | Check image sizes, fonts, SVGs, linked tutorial files, Processing example data, public download URLs, `latest.txt`, archive contents, and externalized CSS. Confirm the archive's actual consumption environment before cutover. |
@@ -133,10 +139,10 @@ The archive environment remains unresolved: `file://`, an embedded IDE browser, 
 
 ## Existing quirks and design decision
 
-Track pre-existing behavior separately from migration failures. In particular, [latest.txt generation](../gatsby-node.js) currently derives `1.5.1` from the first item in [selected releases](../content/download/selected.json). Some dotted contribution filenames are interpreted as locale suffixes, and related examples match subcategory without category. Preserve observed output for parity; propose corrections separately with explicit expected changes. Do not carry these accidental naming rules into new content IDs.
+Track pre-existing behavior separately from migration failures. Some dotted contribution filenames are interpreted as locale suffixes, and related examples match subcategory without category. Preserve observed output for parity; propose corrections separately with explicit expected changes. Do not carry these accidental naming rules into new content IDs.
 
 The architecture comparison considered retaining large React page trees behind Astro wrappers and introducing a precompiled framework-neutral content manifest. Large wrappers still require replacing Gatsby queries, images, MDX, and routing while retaining broad hydration. A separate content compiler adds another artifact and invalidation path without a demonstrated consumer. The chosen design keeps relationship policy in small domain modules and uses Astro's existing content/MDX pipeline.
 
-All three design candidates favored that direction. The synthesis uses the Astro-native shell and domain modules, adds explicit asset collision checks, and keeps document-wide heading state outside separate React islands. The cost is more initial template conversion in exchange for removing Gatsby-specific dependencies in one migration. The plan was checked against source files, read-only inventory counts, and current official documentation; runtime parity is work for the implementation phases.
+The cost is more initial template conversion in exchange for removing Gatsby-specific dependencies in one migration. Runtime parity is work for the implementation phases.
 
 The first implementation task is the baseline capture and route-response matrix. The next is the three-case Astro proof, before converting the remaining templates.
